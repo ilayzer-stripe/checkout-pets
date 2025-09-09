@@ -1,0 +1,27 @@
+{
+  "name": "checkout-pets",
+  "version": "1.0.0",
+  "description": "A virtual pet application for Stripe onboarding exercise",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm start",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "test": "./test-app.sh"
+  },
+  "keywords": [
+    "stripe",
+    "onboarding",
+    "virtual-pet",
+    "typescript",
+    "react",
+    "nodejs"
+  ],
+  "author": "Stripe Checkout Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
