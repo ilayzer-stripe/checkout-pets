@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A virtual pet application for Stripe onboarding exercise",
   "scripts": {
+    "start": "npm run dev",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "backend": "cd backend && npm run dev",
     "frontend": "cd frontend && npm start",
