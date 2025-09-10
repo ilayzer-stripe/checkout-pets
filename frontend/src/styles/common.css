@@ -8,6 +8,7 @@
   transition: all 0.2s ease;
   font-size: 0.875rem;
   font-family: inherit;
+  position: relative;
 }
 
 .btn-primary {
@@ -305,6 +306,37 @@
 .btn.premium-locked {
   position: relative;
   overflow: visible;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure smooth transitions when switching between premium states */
+.btn.premium-locked.btn-disabled {
+  background-color: #E0E0E0 !important;
+  color: #9E9E9E !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.btn.premium-locked.btn-disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background-color: #E0E0E0 !important;
+}
+
+.btn.premium-locked.btn-disabled:active {
+  transform: none !important;
+  box-shadow: none !important;
+  background-color: #E0E0E0 !important;
+}
+
+/* Reset any lingering shimmer effects */
+.btn.premium-locked.btn-disabled.premium-unlock-shimmer {
+  overflow: visible !important;
+}
+
+.btn.premium-locked.btn-disabled.premium-unlock-shimmer::before {
+  display: none !important;
 }
 
 /* Shimmer Effect for Premium Unlock */
@@ -319,7 +351,7 @@
 
 .btn.premium-unlock-shimmer {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .btn.premium-unlock-shimmer::before {
@@ -343,6 +375,7 @@
 /* Ensure lock icons are above shimmer effect */
 .btn.premium-unlock-shimmer .premium-lock {
   z-index: 20;
+  position: relative;
 }
 
 /* Glassmorphic Button */
@@ -410,6 +443,51 @@
   flex: 1;
   text-align: left;
   font-size: 1rem;
+}
+
+/* Custom Tooltip Styles for Premium Locked Buttons */
+.btn.premium-locked[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #635BFF 0%, #00D4AA 100%);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(99, 91, 255, 0.4);
+  margin-bottom: 8px;
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+.btn.premium-locked[title]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #635BFF;
+  z-index: 1000;
+  pointer-events: none;
+  margin-bottom: 3px;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .food-count {

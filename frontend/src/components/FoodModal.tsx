@@ -42,7 +42,7 @@ const FoodModal: React.FC<FoodModalProps> = ({ isOpen, onClose }) => {
     <div className="food-modal-overlay" onClick={onClose}>
       <div className="food-modal" onClick={(e) => e.stopPropagation()}>
         <div className="food-modal-header">
-          <h2>🛒 Buy food for your pet</h2>
+          <h2>🛒 Buy more food</h2>
           <button className="food-modal-close" onClick={onClose}>×</button>
         </div>
         
