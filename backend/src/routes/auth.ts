@@ -32,13 +32,21 @@ router.post('/register', async (req: Request, res: Response) => {
     // Create initial pet for the user
     await PetModel.create(userId);
 
+    // Get the created user to get the actual foodCount
+    const createdUser = await UserModel.findById(userId);
+
     // Generate JWT token
     const token = jwt.sign({ userId }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
     res.status(201).json({
       message: 'User created successfully',
       token,
-      user: { id: userId, username, isPremium: false }
+      user: { 
+        id: userId, 
+        username, 
+        isPremium: false, 
+        foodCount: createdUser?.foodCount || 10 
+      }
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -76,7 +84,8 @@ router.post('/login', async (req: Request, res: Response) => {
       user: { 
         id: user.id, 
         username: user.username, 
-        isPremium: Boolean(user.isPremium) 
+        isPremium: Boolean(user.isPremium),
+        foodCount: user.foodCount
       }
     });
   } catch (error) {
@@ -97,7 +106,8 @@ router.get('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
       user: {
         id: user.id,
         username: user.username,
-        isPremium: Boolean(user.isPremium)
+        isPremium: Boolean(user.isPremium),
+        foodCount: user.foodCount
       }
     });
   } catch (error) {
@@ -111,12 +121,16 @@ router.post('/upgrade', authenticateToken, async (req: AuthRequest, res: Respons
   try {
     await UserModel.updatePremiumStatus(req.user!.id, true);
     
+    // Get updated user data from database
+    const updatedUser = await UserModel.findById(req.user!.id);
+    
     res.json({
       message: 'Successfully upgraded to premium!',
       user: {
-        id: req.user!.id,
-        username: req.user!.username,
-        isPremium: true
+        id: updatedUser!.id,
+        username: updatedUser!.username,
+        isPremium: true,
+        foodCount: updatedUser!.foodCount
       }
     });
   } catch (error) {
@@ -130,16 +144,67 @@ router.post('/downgrade', authenticateToken, async (req: AuthRequest, res: Respo
   try {
     await UserModel.updatePremiumStatus(req.user!.id, false);
     
+    // Check if user's pet has a premium emoji and reset to free emoji if needed
+    const pet = await PetModel.findByUserId(req.user!.id);
+    if (pet) {
+      const premiumTypes = ['rabbit', 'dragon'];
+      if (premiumTypes.includes(pet.petType)) {
+        // Reset to first free emoji (cat)
+        await PetModel.updateAppearance(req.user!.id, 'cat', pet.color);
+      }
+    }
+    
+    // Get updated user data from database
+    const updatedUser = await UserModel.findById(req.user!.id);
+    
     res.json({
       message: 'Successfully downgraded to free!',
       user: {
-        id: req.user!.id,
-        username: req.user!.username,
-        isPremium: false
+        id: updatedUser!.id,
+        username: updatedUser!.username,
+        isPremium: false,
+        foodCount: updatedUser!.foodCount
       }
     });
   } catch (error) {
     console.error('Downgrade error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Purchase food (for testing)
+router.post('/purchase-food', authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const { amount, price } = req.body;
+    
+    if (!amount || !price || amount <= 0 || price <= 0) {
+      return res.status(400).json({ error: 'Invalid amount or price' });
+    }
+
+    // Get current user
+    const user = await UserModel.findById(req.user!.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Add food to user's account
+    const newFoodCount = user.foodCount + amount;
+    await UserModel.updateFoodCount(req.user!.id, newFoodCount);
+
+    // Get updated user
+    const updatedUser = await UserModel.findById(req.user!.id);
+    
+    res.json({
+      message: `Successfully purchased ${amount} food!`,
+      user: {
+        id: updatedUser!.id,
+        username: updatedUser!.username,
+        isPremium: Boolean(updatedUser!.isPremium),
+        foodCount: updatedUser!.foodCount
+      }
+    });
+  } catch (error) {
+    console.error('Purchase food error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

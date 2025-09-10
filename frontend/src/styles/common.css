@@ -2,17 +2,18 @@
 .btn {
   padding: 10px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
-  font-size: 14px;
+  font-size: 0.875rem;
+  font-family: inherit;
 }
 
 .btn-primary {
   background-color: #00D4AA;
   color: white;
-  box-shadow: 0 2px 8px rgba(0, 212, 170, 0.3);
+  box-shadow: 0 1px 2px rgba(0, 212, 170, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -28,7 +29,7 @@
 .btn-danger {
   background-color: #FF6B6B;
   color: white;
-  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 1px 2px rgba(255, 107, 107, 0.2);
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -209,17 +210,139 @@
 
 /* Premium Badge */
 .premium-badge {
-  background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-  color: #667eea;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
+  background: linear-gradient(135deg, #635BFF 0%, #00D4AA 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
+  letter-spacing: 0.025em;
+  box-shadow: 0 1px 2px rgba(99, 91, 255, 0.2);
+  border: 1px solid rgba(99, 91, 255, 0.2);
   backdrop-filter: blur(10px);
+}
+
+.header-user-premium {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-section-visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.premium-section-hidden {
+  opacity: 0;
+  transform: translateX(-20px) scale(0.95);
+}
+
+/* Downgrade Button */
+.downgrade-button {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 8px;
+  min-width: 32px;
+  width: 32px;
+  height: 28px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(156, 163, 175, 0.2);
+  border: 1px solid rgba(156, 163, 175, 0.3);
+}
+
+.downgrade-button:hover {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  width: 110px;
+  padding: 4px 16px;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(156, 163, 175, 0.3);
+  border-color: rgba(156, 163, 175, 0.4);
+}
+
+.downgrade-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(107, 114, 128, 0.2);
+}
+
+.downgrade-icon {
+  display: inline-block;
+  font-size: 0.8rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.downgrade-text {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.downgrade-button:hover .downgrade-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.downgrade-button:hover .downgrade-icon {
+  transform: scale(1.1);
+}
+
+/* Premium Locked Button */
+.btn.premium-locked {
+  position: relative;
+  overflow: visible;
+}
+
+/* Shimmer Effect for Premium Unlock */
+@keyframes shimmer-sweep {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.btn.premium-unlock-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn.premium-unlock-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shimmer-sweep 1.5s ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure lock icons are above shimmer effect */
+.btn.premium-unlock-shimmer .premium-lock {
+  z-index: 20;
 }
 
 /* Glassmorphic Button */
@@ -241,4 +364,106 @@
   background: rgba(255,255,255,0.3);
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Eat Button with Food Count Progress Bar */
+.eat-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: none;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.eat-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.eat-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.eat-button.no-food {
+  border-color: #e0e0e0;
+  color: #9e9e9e;
+  cursor: not-allowed;
+}
+
+.eat-button.no-food:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.eat-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.eat-text {
+  flex: 1;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.food-count {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.food-count:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.food-plus {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.food-count:hover .food-plus {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.eat-button.no-food .food-count {
+  background: rgba(158, 158, 158, 0.2);
+  border-color: rgba(158, 158, 158, 0.3);
+}
+
+/* Animation for food count changes */
+@keyframes foodConsumed {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); color: #ffeb3b; }
+  100% { transform: scale(1); }
+}
+
+.food-count.consumed {
+  animation: foodConsumed 0.5s ease-in-out;
 }

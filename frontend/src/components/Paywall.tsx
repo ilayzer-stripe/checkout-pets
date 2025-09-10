@@ -1,90 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from './ToastContainer';
 import '../styles/PetDisplay.css';
 
-interface PaywallCardProps {
-  className: string;
-  title: string;
-  description: string;
-  buttonText: string;
-  buttonClassName: string;
-  onButtonClick: () => void;
-}
+interface PaywallProps {}
 
-const PaywallCard: React.FC<PaywallCardProps> = ({
-  className,
-  title,
-  description,
-  buttonText,
-  buttonClassName,
-  onButtonClick
-}) => {
-  return (
-    <div className={className}>
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <button
-        onClick={onButtonClick}
-        className={buttonClassName}
-      >
-        {buttonText}
-      </button>
-    </div>
-  );
-};
-
-interface PaywallProps {
-  onError: (error: string) => void;
-}
-
-const Paywall: React.FC<PaywallProps> = ({ onError }) => {
-  const { user, upgradeToPremium, downgradeToFree } = useAuth();
-  if (!user) {
-    return null;
-  }
-
+const Paywall: React.FC<PaywallProps> = () => {
+  const { user, upgradeToPremium } = useAuth();
+  const { showToast } = useToast();
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+  
+  useEffect(() => {
+    if (user && !user.isPremium) {
+      // Show paywall and animate in
+      setShouldRender(true);
+      const timer = setTimeout(() => setIsVisible(true), 10);
+      return () => clearTimeout(timer);
+    } else if (user && user.isPremium) {
+      // User upgraded - animate out then remove from DOM
+      setIsVisible(false);
+      const timer = setTimeout(() => setShouldRender(false), 300);
+      return () => clearTimeout(timer);
+    } else {
+      // No user - don't render
+      setShouldRender(false);
+      setIsVisible(false);
+    }
+  }, [user]);
+  
   const handleUpgrade = async () => {
     try {
       await upgradeToPremium();
     } catch (err: any) {
-      onError(err.message);
+      showToast(err.message, 'error');
     }
   };
 
-  const handleDowngrade = async () => {
-    try {
-      console.log('Before downgrade - user.isPremium:', user.isPremium);
-      await downgradeToFree();
-      console.log('After downgrade - user.isPremium:', user.isPremium);
-    } catch (err: any) {
-      console.error('Downgrade error:', err);
-      onError(err.message);
-    }
-  };
-
-  if (user.isPremium) {
-    return (
-      <PaywallCard
-        className="paywall paywall-premium"
-        title="✨ Premium Active!"
-        description="You have access to all premium features!"
-        buttonText="🔄 Downgrade to Free"
-        buttonClassName="paywall-button paywall-downgrade"
-        onButtonClick={handleDowngrade}
-      />
-    );
-  } else {
-    return (
-      <PaywallCard
-        className="paywall paywall-free"
-        title="✨ Unlock Premium Features!"
-        description="Get access to premium food, pet customization, and mini-games!"
-        buttonText="✨ Upgrade to Premium"
-        buttonClassName="paywall-button"
-        onButtonClick={handleUpgrade}
-      />
-    );
+  // Don't render if we shouldn't show the paywall
+  if (!shouldRender) {
+    return null;
   }
+
+  return (
+    <div className={`paywall paywall-free ${isVisible ? 'paywall-visible' : 'paywall-hidden'}`}>
+      <h3>✨ Unlock Premium Features!</h3>
+      <p>Get access to new actions, extra pet customization, and more!</p>
+      <button
+        onClick={handleUpgrade}
+        className="paywall-button"
+      >
+        ✨ Upgrade to Premium
+      </button>
+    </div>
+  );
 };
 
 export default Paywall;
