@@ -1,6 +1,6 @@
-# CheckoutPets - Stripe Onboarding Exercise
+# CheckoutPets
 
-A simple virtual pet application built with Node.js/TypeScript backend and React frontend, designed as a Stripe onboarding exercise.
+A simple virtual pet application built with Node.js/TypeScript backend and React frontend.
 
 ## Current Features (Complete App)
 
@@ -15,8 +15,6 @@ A simple virtual pet application built with Node.js/TypeScript backend and React
 - Pet customization (different types and colors)
 - Mini-games to play with your pet
 - Advanced pet interactions
-
-**Note**: Premium features are currently blocked by server-side validation but have NO payment integration. This is intentional - the exercise is to add Stripe payments to unlock these features.
 
 ## Tech Stack
 
@@ -62,10 +60,6 @@ npm run dev
    JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
    PORT=3001
    FRONTEND_URL="http://localhost:3000"
-   STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key_here"
-   STRIPE_PUBLISHABLE_KEY="pk_test_your_stripe_publishable_key_here"
-   STRIPE_WEBHOOK_SECRET="whsec_your_webhook_secret_here"
-   PREMIUM_PRICE_ID="price_your_premium_price_id_here"
    ```
 
 4. Start the development server:
@@ -113,61 +107,3 @@ From the project root, you can run:
 - `POST /api/pet/play` - Play with pet - Premium only
 - `PUT /api/pet/name` - Update pet name
 - `PUT /api/pet/appearance` - Update pet appearance - Premium only
-
-
-## Exercise Goals
-
-This app is designed to help new hires learn:
-- Full-stack development with TypeScript
-- Database design and management
-- Authentication and authorization
-- API design and implementation
-- Stripe payment integration
-- Frontend-backend communication
-
-## The Exercise: Add Stripe Payments
-
-**Your Task**: Add Stripe Checkout integration to unlock premium features.
-
-### What You Need to Implement:
-
-1. **Stripe Setup**
-   - Create a Stripe account and get your API keys
-   - Set up a product and price in Stripe Dashboard
-   - Update the `.env` file with your Stripe keys
-
-2. **Backend Integration**
-   - Create Stripe checkout session endpoint (`POST /api/stripe/create-checkout-session`)
-   - Add Stripe webhook handler (`POST /api/stripe/webhook`)
-   - Update user premium status when payment succeeds
-
-3. **Frontend Integration**
-   - Create a paywall modal component
-   - Add "Upgrade to Premium" buttons throughout the app
-   - Handle successful payments and update UI state
-
-4. **Testing**
-   - Test the complete payment flow
-   - Verify premium features unlock after payment
-   - Test webhook handling
-
-### Current State:
-- ✅ Complete authentication system
-- ✅ Pet management with stats tracking
-- ✅ Premium feature gating (server-side validation)
-- ✅ Frontend UI with premium feature buttons
-- ❌ **Missing**: Stripe payment integration
-
-### Files to Focus On:
-- `backend/src/routes/stripe.ts` (create this)
-- `frontend/src/components/PaywallModal.tsx` (create this)
-- Update existing components to show upgrade prompts
-- Add Stripe webhook handling to `backend/src/index.ts`
-
-### Success Criteria:
-- Users can click "Upgrade to Premium" and complete payment
-- After successful payment, premium features become available
-- User's premium status persists across sessions
-- Webhook properly updates user premium status
-
-**Hint**: Start with the Stripe Checkout documentation and work your way through the integration step by step!

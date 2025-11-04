@@ -19,6 +19,7 @@ function initTables() {
       password TEXT NOT NULL,
       isPremium INTEGER DEFAULT 0,
       stripeCustomerId TEXT,
+      foodCount INTEGER DEFAULT 10,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `;
@@ -28,7 +29,7 @@ function initTables() {
       id TEXT PRIMARY KEY,
       name TEXT DEFAULT 'Buddy',
       happiness INTEGER DEFAULT 50,
-      hunger INTEGER DEFAULT 50,
+      intelligence INTEGER DEFAULT 50,
       energy INTEGER DEFAULT 50,
       petType TEXT DEFAULT 'cat',
       color TEXT DEFAULT 'orange',
@@ -40,20 +41,28 @@ function initTables() {
   db.run(createUsersTable, (err) => {
     if (err) {
       console.error('Error creating users table:', err);
-    } else {
-      console.log('Users table created/verified');
     }
   });
   
   db.run(createPetsTable, (err) => {
     if (err) {
       console.error('Error creating pets table:', err);
-    } else {
-      console.log('Pets table created/verified');
     }
   });
-  
-  console.log('Connected to SQLite database');
+
+  // Add foodCount column to existing users if it doesn't exist
+  db.run(`ALTER TABLE users ADD COLUMN foodCount INTEGER DEFAULT 10`, (err) => {
+    if (err && !err.message.includes('duplicate column name')) {
+      console.error('Error adding foodCount column:', err);
+    }
+  });
+
+  // Update existing users to have 10 food if they don't have the column set
+  db.run(`UPDATE users SET foodCount = 10 WHERE foodCount IS NULL`, (err) => {
+    if (err) {
+      console.error('Error updating existing users food count:', err);
+    }
+  });
 }
 
 // Helper functions for async/await with sqlite3

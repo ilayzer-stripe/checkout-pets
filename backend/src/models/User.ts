@@ -7,6 +7,7 @@ export interface User {
   password: string;
   isPremium: number; // SQLite uses INTEGER for boolean
   stripeCustomerId?: string;
+  foodCount: number;
   createdAt: string;
 }
 
@@ -40,5 +41,22 @@ export class UserModel {
       'UPDATE users SET stripeCustomerId = ? WHERE id = ?',
       [stripeCustomerId, id]
     );
+  }
+
+  static async updateFoodCount(id: string, foodCount: number): Promise<void> {
+    await dbRun(
+      'UPDATE users SET foodCount = ? WHERE id = ?',
+      [foodCount, id]
+    );
+  }
+
+  static async consumeFood(id: string): Promise<boolean> {
+    const user = await this.findById(id);
+    if (!user || user.foodCount <= 0) {
+      return false;
+    }
+    
+    await this.updateFoodCount(id, user.foodCount - 1);
+    return true;
   }
 }

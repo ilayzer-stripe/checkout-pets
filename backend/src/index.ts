@@ -37,13 +37,12 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🐾 CheckoutPets API server running on port ${PORT}`);
-  console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+  // Server started successfully
 });
 
 // Initialize database separately (non-blocking)
 import('./database/init').then(() => {
-  console.log('Database initialized successfully');
+  // Database initialized successfully
 }).catch((err) => {
   console.error('Database initialization failed:', err);
 });

@@ -1,16 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
+import { User } from '../types';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
 // Set up axios defaults
 axios.defaults.baseURL = API_BASE_URL;
-
-interface User {
-  id: string;
-  username: string;
-  isPremium: boolean;
-}
 
 interface AuthContextType {
   user: User | null;
@@ -20,6 +15,7 @@ interface AuthContextType {
   logout: () => void;
   upgradeToPremium: () => Promise<void>;
   downgradeToFree: () => Promise<void>;
+  updateUser: (userData: User) => void;
   loading: boolean;
 }
 
@@ -119,15 +115,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const downgradeToFree = async () => {
     try {
-      console.log('AuthContext: Before downgrade - user.isPremium:', user?.isPremium);
       const response = await axios.post('/auth/downgrade');
-      console.log('AuthContext: Downgrade response:', response.data);
       setUser(response.data.user);
-      console.log('AuthContext: After setUser - new user:', response.data.user);
     } catch (error: any) {
       console.error('AuthContext: Downgrade error:', error);
       throw new Error(error.response?.data?.error || 'Downgrade failed');
     }
+  };
+
+  const updateUser = (userData: User) => {
+    setUser(userData);
   };
 
   const value = {
@@ -138,6 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     upgradeToPremium,
     downgradeToFree,
+    updateUser,
     loading
   };
 

@@ -7,6 +7,7 @@ export interface AuthRequest extends Request {
     id: string;
     username: string;
     isPremium: boolean;
+    foodCount: number;
   };
 }
 
@@ -29,7 +30,8 @@ export const authenticateToken = async (req: AuthRequest, res: Response, next: N
     req.user = {
       id: user.id,
       username: user.username,
-      isPremium: Boolean(user.isPremium)
+      isPremium: Boolean(user.isPremium),
+      foodCount: user.foodCount || 10
     };
     
     next();

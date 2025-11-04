@@ -1,0 +1,201 @@
+/* Food Modal Styles */
+.food-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.food-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+.food-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.food-modal-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.food-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.food-modal-close:hover {
+  background-color: #F5F5F5;
+  color: #333;
+}
+
+.food-modal-content {
+  padding: 12px 24px;
+}
+
+.food-modal-description {
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.food-options {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.food-option {
+  flex: 1;
+  border: 2px solid #E0E0E0;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: #FAFAFA;
+}
+
+.food-option:hover {
+  border-color: #00D4AA;
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 170, 0.15);
+}
+
+.food-option-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.food-option-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.food-amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00D4AA;
+}
+
+.food-option-description {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+
+.food-purchase-btn {
+  background: linear-gradient(135deg, #00D4AA, #00B894);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.food-purchase-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+}
+
+.food-purchase-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.food-purchase-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.food-modal-footer {
+  border-top: 1px solid #E0E0E0;
+  padding-top: 16px;
+  text-align: center;
+}
+
+.current-food {
+  color: #666;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.current-food strong {
+  color: #00D4AA;
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .food-modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .food-options {
+    flex-direction: column;
+  }
+  
+  .food-modal-header {
+    padding: 16px 20px 12px;
+  }
+  
+  .food-modal-content {
+    padding: 20px;
+  }
+}
